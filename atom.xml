@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-07-05T06:18:32.000Z</updated>
+  <updated>2017-07-17T11:18:19.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,9 +16,82 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>let and const</title>
+    <link href="http://yoursite.com/let-and-const/"/>
+    <id>http://yoursite.com/let-and-const/</id>
+    <published>2017-07-17T11:17:48.000Z</published>
+    <updated>2017-07-17T11:18:19.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="作用域说明"><a href="#作用域说明" class="headerlink" title="作用域说明"></a>作用域说明</h2><p>在es6之前我们我们声明一个变量用var如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var a = 1;</div><div class="line">var arr = [1,2,3];</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>es6之前呢javascript没有块级作用域，如何来理解呢：就是在代码块里声明的变量会“变量提升”至就近的函数作用域顶部或全局当中。如我们熟悉的for循环：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">for( var i=0; i&lt;10; i++)&#123;</div><div class="line">    console.log(i)</div><div class="line">&#125;</div><div class="line"># 提升到全局，相当于</div><div class="line">var i;</div><div class="line">for(i=0; i&lt;10; i++)&#123;</div><div class="line">    console.log(i)</div><div class="line">&#125;</div><div class="line"></div><div class="line">function test ()&#123;</div><div class="line">    .....</div><div class="line">    for( var i=0; i&lt;10; i++)&#123;</div><div class="line">        console.log(i)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"># 提升到函数作用域顶部，相当于</div><div class="line">function test ()&#123;</div><div class="line">    var i;</div><div class="line">    .....</div><div class="line">    for(i=0; i&lt;10; i++)&#123;</div><div class="line">        console.log(i)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在es6中给出了块级作用域的概念：{}所包涵的代码块就是一个作用域。同时又给出了另外两个变量声明的关键字：let和const。</p>
+<h2 id="let声明变量"><a href="#let声明变量" class="headerlink" title="let声明变量"></a>let声明变量</h2><p>let与var一样，也是用来声明变量的，但它有着更好的作用域规则。来看几个栗子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function test1()&#123;</div><div class="line">    for(var i=1;i&lt;3;i++)&#123;</div><div class="line">        console.log(i);</div><div class="line">    &#125;</div><div class="line">    console.log(i); // 3</div><div class="line">&#125;</div><div class="line">test1();</div><div class="line"></div><div class="line">function test2()&#123;</div><div class="line">    for(let i=1;i&lt;3;i++)&#123;</div><div class="line">        console.log(i);</div><div class="line">    &#125;</div><div class="line">    console.log(i); // 报错了</div><div class="line">&#125;</div><div class="line">test2();</div></pre></td></tr></table></figure>
+<p>执行test1的时候，由于变量提升了所已外面的log能找到i,而test2用的let声明的变量，在for循环的代码块内生效，for循环结束后变量被销毁，被垃圾回收机制回收。所以会报错。</p>
+<p>let另外一个值得注意的是，不能重复声明变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let a = 1;</div><div class="line">let a = 3; // 报错 Uncaught SyntaxError: Identifier &apos;a&apos; has already been declared</div></pre></td></tr></table></figure></p>
+<h2 id="const声明变量"><a href="#const声明变量" class="headerlink" title="const声明变量"></a>const声明变量</h2><p>与let不同之处在于，const声明的变量只可以在声明时赋值，不可随意修改，否则会导致语法错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">const PI=3.1415926; //ok</div><div class="line"></div><div class="line">const G;</div><div class="line">G = 9.8; // SyntaxError: Missing initializer in const declaration</div><div class="line"></div><div class="line">const MODIFY = 1;</div><div class="line">MODIFY = 2; // TypeError: Assignment to constant variable.</div></pre></td></tr></table></figure></p>
+<p>上面可以看到声明的时候必须赋值否则回报没有初始化的错误，已赋值的常量再次赋值也会报错。<br>我们怎么理解下面这段代码呢<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function test()&#123;</div><div class="line">  const obj=&#123;</div><div class="line">    name: &apos;lilei&apos;</div><div class="line">  &#125;</div><div class="line">  obj.age=20;</div><div class="line">  console.log(obj); // &#123;name: &quot;lilei&quot;, age: 20&#125;</div><div class="line">&#125;</div><div class="line">test()</div></pre></td></tr></table></figure></p>
+<p>const声明的变量不是不能修改吗，这里怎么可以修改成功呢，我们知道对象是引用类型，我们修改的是值，而不是其引用，而const声明的对象类型的变量保存的是其引用，所以是不矛盾的。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;作用域说明&quot;&gt;&lt;a href=&quot;#作用域说明&quot; class=&quot;headerlink&quot; title=&quot;作用域说明&quot;&gt;&lt;/a&gt;作用域说明&lt;/h2&gt;&lt;p&gt;在es6之前我们我们声明一个变量用var如：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>tree command</title>
+    <link href="http://yoursite.com/tree-command/"/>
+    <id>http://yoursite.com/tree-command/</id>
+    <published>2017-07-14T01:51:32.000Z</published>
+    <updated>2017-07-14T01:53:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Mac中tree命令使用"><a href="#Mac中tree命令使用" class="headerlink" title="Mac中tree命令使用"></a>Mac中tree命令使用</h1><p>tree是一个能列出递归目录的命令，以图形显示驱动器或路径的文件夹结构，可以生成命令树。Windows和Linux都有，mac没有原生支持，需要安装tree或者在home目录中添加.bashrc文件里面加入：<br>alias tree=”find . -print | sed -e ‘s;[^/]*/;|<strong><strong>;g;s;</strong></strong>|; |;g’” 。保存退出后，使用source .bashrc命令更新一下脚本资源，这是再在终端下试一下tree命令.<br>第二种没有试过，我们来试下比较简单的第一种吧。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># 安装Homebrew 在终端输入下面指令</span></div><div class="line"></div><div class="line">/usr/bin/ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span></div><div class="line"></div><div class="line"><span class="comment"># 安装 tree</span></div><div class="line">brew install tree</div></pre></td></tr></table></figure>
+<p>在某个项目下执行tree命令即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">panzhiqiangdeMacBook-Pro:webpack2-<span class="keyword">in</span>-action panzhiqiang$ tree -L <span class="number">1</span></div><div class="line"></div><div class="line"><span class="comment"># -L 1 指只显示一级目录</span></div><div class="line"></div><div class="line">.</div><div class="line">├── README.md</div><div class="line">├── index.html</div><div class="line">├── index.js</div><div class="line">├── node_modules</div><div class="line">└── package.json</div></pre></td></tr></table></figure>
+<p>tree命令后面的参数有其他可选,具体我们可以用tree –help来查看</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">panzhiqiangdeMacBook-Pro:webpack2-in-action panzhiqiang$ tree --help</div><div class="line">usage: tree [-acdfghilnpqrstuvxACDFJQNSUX] [-H baseHREF] [-T title ]</div><div class="line">        [-L level [-R]] [-P pattern] [-I pattern] [-o filename] [--version]</div><div class="line">        [--help] [--inodes] [--device] [--noreport] [--nolinks] [--dirsfirst]</div><div class="line">        [--charset charset] [--filelimit[=]#] [--si] [--timefmt[=]&lt;f&gt;]</div><div class="line">        [--sort[=]&lt;name&gt;] [--matchdirs] [--ignore-case] [--] [&lt;directory list&gt;]</div><div class="line">  ------- Listing options -------</div><div class="line">  -a            All files are listed.</div><div class="line">  -d            List directories only.</div><div class="line">  -l            Follow symbolic links like directories.</div><div class="line">  -f            Print the full path prefix for each file.</div><div class="line">  -x            Stay on current filesystem only.</div><div class="line">  -L level      Descend only level directories deep.</div><div class="line">  -R            Rerun tree when max dir level reached.</div><div class="line">  -P pattern    List only those files that match the pattern given.</div><div class="line">  -I pattern    Do not list files that match the given pattern.</div><div class="line">  --ignore-case Ignore case when pattern matching.</div><div class="line">  --matchdirs   Include directory names in -P pattern matching.</div><div class="line">  --noreport    Turn off file/directory count at end of tree listing.</div><div class="line">  --charset X   Use charset X for terminal/HTML and indentation line output.</div><div class="line">  --filelimit # Do not descend dirs with more than # files in them.</div><div class="line">  --timefmt &lt;f&gt; Print and format time according to the format &lt;f&gt;.</div><div class="line">  -o filename   Output to file instead of stdout.</div><div class="line">  -------- File options ---------</div><div class="line">  -q            Print non-printable characters as '?'.</div><div class="line">  -N            Print non-printable characters as is.</div><div class="line">  -Q            Quote filenames with double quotes.</div><div class="line">  -p            Print the protections for each file.</div><div class="line">  -u            Displays file owner or UID number.</div><div class="line">  -g            Displays file group owner or GID number.</div><div class="line">  -s            Print the size in bytes of each file.</div><div class="line">  -h            Print the size in a more human readable way.</div><div class="line">  --si          Like -h, but use in SI units (powers of 1000).</div><div class="line">  -D            Print the date of last modification or (-c) status change.</div><div class="line">  -F            Appends '/', '=', '*', '@', '|' or '&gt;' as per ls -F.</div><div class="line">  --inodes      Print inode number of each file.</div><div class="line">  --device      Print device ID number to which each file belongs.</div><div class="line">  ------- Sorting options -------</div><div class="line">  -v            Sort files alphanumerically by version.</div><div class="line">  -t            Sort files by last modification time.</div><div class="line">  -c            Sort files by last status change time.</div><div class="line">  -U            Leave files unsorted.</div><div class="line">  -r            Reverse the order of the sort.</div><div class="line">  --dirsfirst   List directories before files (-U disables).</div><div class="line">  --sort X      Select sort: name,version,size,mtime,ctime.</div><div class="line">  ------- Graphics options ------</div><div class="line">  -i            Don't print indentation lines.</div><div class="line">  -A            Print ANSI lines graphic indentation lines.</div><div class="line">  -S            Print with CP437 (console) graphics indentation lines.</div><div class="line">  -n            Turn colorization off always (-C overrides).</div><div class="line">  -C            Turn colorization on always.</div><div class="line">  ------- XML/HTML/JSON options -------</div><div class="line">  -X            Prints out an XML representation of the tree.</div><div class="line">  -J            Prints out an JSON representation of the tree.</div><div class="line">  -H baseHREF   Prints out HTML format with baseHREF as top directory.</div><div class="line">  -T string     Replace the default HTML title and H1 header with string.</div><div class="line">  --nolinks     Turn off hyperlinks in HTML output.</div><div class="line">  ---- Miscellaneous options ----</div><div class="line">  --version     Print version and exit.</div><div class="line">  --help        Print usage and this help message and exit.</div><div class="line">  --            Options processing terminator.</div></pre></td></tr></table></figure>
+<p>这样我们可以愉快的玩tree命令了，感谢</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Mac中tree命令使用&quot;&gt;&lt;a href=&quot;#Mac中tree命令使用&quot; class=&quot;headerlink&quot; title=&quot;Mac中tree命令使用&quot;&gt;&lt;/a&gt;Mac中tree命令使用&lt;/h1&gt;&lt;p&gt;tree是一个能列出递归目录的命令，以图形显示驱动器或路径的
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>javascript typeof</title>
+    <link href="http://yoursite.com/javascript-typeof/"/>
+    <id>http://yoursite.com/javascript-typeof/</id>
+    <published>2017-07-11T13:59:35.000Z</published>
+    <updated>2017-07-11T14:01:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/images/city-750.jpg" alt="你好我的城市，我爱你！" title="城市图片"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;/images/city-750.jpg&quot; alt=&quot;你好我的城市，我爱你！&quot; title=&quot;城市图片&quot;&gt;&lt;/p&gt;
+
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>my first blog</title>
-    <link href="http://yoursite.com/2017/07/04/my-first-blog/"/>
-    <id>http://yoursite.com/2017/07/04/my-first-blog/</id>
+    <link href="http://yoursite.com/my-first-blog/"/>
+    <id>http://yoursite.com/my-first-blog/</id>
     <published>2017-07-04T05:29:52.000Z</published>
     <updated>2017-07-05T06:18:32.000Z</updated>
     
@@ -37,8 +110,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2017/07/04/hello-world/"/>
-    <id>http://yoursite.com/2017/07/04/hello-world/</id>
+    <link href="http://yoursite.com/hello-world/"/>
+    <id>http://yoursite.com/hello-world/</id>
     <published>2017-07-04T05:13:10.000Z</published>
     <updated>2017-07-04T05:13:10.000Z</updated>
     
